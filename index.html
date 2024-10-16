@@ -1,8 +1,96 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  </head>
-  <body>
-    <p>Hello, world!</p>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Entry - System Engineering Services</title>
+    <link rel="stylesheet" href="sample.css">
+</head>
+<body>
+    <header>
+        <h1>Order Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="#orders">Orders</a></li>
+                <li><a href="#clients">Clients</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="order-entry">
+            <h2>Order Entry</h2>
+            <form id="order-form">
+                <label for="client-name">Client Name:</label>
+                <input type="text" id="client-name" name="client-name" required>
+
+                <label for="project-name">Project Name:</label>
+                <input type="text" id="project-name" name="project-name" required>
+
+                <label for="service-type">Service Type:</label>
+                <select id="service-type" name="service-type">
+                    <option value="consultation">Consultation</option>
+                    <option value="design">Design</option>
+                    <option value="development">Development</option>
+                    <option value="testing">Testing</option>
+                </select>
+
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+
+                <label for="estimated-hours">Estimated Hours:</label>
+                <input type="number" id="estimated-hours" name="estimated-hours" required>
+
+                <label for="budget">Budget:</label>
+                <input type="number" id="budget" name="budget" step="0.01" required>
+
+                <button type="submit">Submit Order</button>
+            </form>
+        </section>
+
+        <section id="order-details">
+            <h2>Order Details</h2>
+            <div id="order-info">
+                <p><strong>Client Name:</strong> <span id="order-client-name">N/A</span></p>
+                <p><strong>Project Name:</strong> <span id="order-project-name">N/A</span></p>
+                <p><strong>Service Type:</strong> <span id="order-service-type">N/A</span></p>
+                <p><strong>Description:</strong> <span id="order-description">N/A</span></p>
+                <p><strong>Estimated Hours:</strong> <span id="order-estimated-hours">N/A</span></p>
+                <p><strong>Budget:</strong> $<span id="order-budget">0.00</span></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Order Management System</p>
+    </footer>
+
+    <script>
+        document.getElementById('order-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Capture form data
+            const clientName = document.getElementById('client-name').value;
+            const projectName = document.getElementById('project-name').value;
+            const serviceType = document.getElementById('service-type').value;
+            const description = document.getElementById('description').value;
+            const estimatedHours = document.getElementById('estimated-hours').value;
+            const budget = document.getElementById('budget').value;
+
+            // Display order details
+            document.getElementById('order-client-name').textContent = clientName;
+            document.getElementById('order-project-name').textContent = projectName;
+            document.getElementById('order-service-type').textContent = serviceType;
+            document.getElementById('order-description').textContent = description;
+            document.getElementById('order-estimated-hours').textContent = estimatedHours;
+            document.getElementById('order-budget').textContent = budget;
+
+            // Clear the form
+            this.reset();
+        });
+    </script>
+</body>
 </html>
