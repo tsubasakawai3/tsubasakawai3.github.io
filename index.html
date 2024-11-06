@@ -1,95 +1,172 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Entry - System Engineering Services</title>
-    <link rel="stylesheet" href="sample.css">
+    <title>受注フォーム</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Order Management System</h1>
-        <nav>
-            <ul>
-                <li><a href="#orders">Orders</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#reports">Reports</a></li>
-                <li><a href="#settings">Settings</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="order-entry">
-            <h2>Order Entry</h2>
-            <form id="order-form">
-                <label for="client-name">Client Name:</label>
-                <input type="text" id="client-name" name="client-name" required>
-
-                <label for="project-name">Project Name:</label>
-                <input type="text" id="project-name" name="project-name" required>
-
-                <label for="service-type">Service Type:</label>
-                <select id="service-type" name="service-type">
-                    <option value="consultation">Consultation</option>
-                    <option value="design">Design</option>
-                    <option value="development">Development</option>
-                    <option value="testing">Testing</option>
-                </select>
-
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
-
-                <label for="estimated-hours">Estimated Hours:</label>
-                <input type="number" id="estimated-hours" name="estimated-hours" required>
-
-                <label for="budget">Budget:</label>
-                <input type="number" id="budget" name="budget" step="0.01" required>
-
-                <button type="submit">Submit Order</button>
-            </form>
-        </section>
-
-        <section id="order-details">
-            <h2>Order Details</h2>
-            <div id="order-info">
-                <p><strong>Client Name:</strong> <span id="order-client-name">N/A</span></p>
-                <p><strong>Project Name:</strong> <span id="order-project-name">N/A</span></p>
-                <p><strong>Service Type:</strong> <span id="order-service-type">N/A</span></p>
-                <p><strong>Description:</strong> <span id="order-description">N/A</span></p>
-                <p><strong>Estimated Hours:</strong> <span id="order-estimated-hours">N/A</span></p>
-                <p><strong>Budget:</strong> $<span id="order-budget">0.00</span></p>
+    <div class="main-content">
+        <div class="title">
+            <h1>受注入力</h1>
+            <nav>
+                <ul>
+                    <li><a href="#topMenu">▶TopMenu</a></li>
+                    <li><a href="#orderMenu">▶受注Menu</a></li>
+                    <li><a href="#orderReport">▶受注日報</a></li>
+                    <li><a href="#dispatchInstructions">▶手配・指示Menu</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="button-container">
+            <button id="addOrder">受注登録</button>
+            <button id="changeOrder">受注変更</button>
+            <button id="deleteOrder">受注削除</button>
+        </div>
+        <form class="order-form">
+            <div class="form-group">
+                <label>受注No: <input type="text" name="orderNo" maxlength="20" class="input-small" readonly></label>
+                <label>受注日: <input type="date" name="orderDate" class="input-date" required></label>
+                <label>受注件名: <input type="text" name="orderTitle" maxlength="50" class="input-medium" required></label>
             </div>
-        </section>
-    </main>
+            <div class="form-group">
+                <label>顧客CD: <input type="text" name="customerCD" maxlength="8" oninput="updateCustomer()" class="input-small" required> 顧客名: <input type="text" name="customerName" readonly class="input-medium"></label>
+                <label>発注担当者CD: <input type="text" name="staffCD" maxlength="8" oninput="updateStaff()" class="input-small" required> 発注担当者氏名: <input type="text" name="staffName" readonly class="input-medium"></label>
+            </div>
+            <div class="form-group">
+                <label>発注No: <input type="text" name="staffOrderNo" maxlength="20" class="input-small" required></label>
+                <label>納入日: <input type="date" name="deliveryDate" class="input-date" required></label>
+                <label></label>
+            </div>
+            <div class="form-group">
+                <label>納入条件CD: <input type="text" name="deliveryConditionCD" maxlength="8" oninput="updateDeliveryCondition()" class="input-small" required> 納入条件内容: <input type="text" name="deliveryConditionContent" readonly class="input-medium"></label>
+                <label>支払条件CD: <input type="text" name="paymentConditionCD" maxlength="8" oninput="updatePaymentCondition()" class="input-small" required> 支払条件内容: <input type="text" name="paymentConditionContent" readonly class="input-medium"></label>
+            </div>
+            <div class="form-group">
+                <label>受注金額: <input type="number" name="orderAmount" class="input-small" step="10" min="0" required></label>
+                <label>消費税区分: <input type="text" name="taxDivision" class="input-small" required></label>
+                <label>受注ステータス: <input type="text" name="orderStatus" maxlength="2" class="input-small" required><button type="button" class="status-btn">受注確定</button></label>
+            </div>
+        </form>
+        <br>
+        <div class="details-container">
+            <div class="button-container">
+                <button id="addRow">明細追加</button>
+                <button id="deleteRow">明細削除</button>
+            </div>
+
+            <div class="header-container">
+                <div class="select-all-container">
+                    
+                </div>
+            </div>
+
+            <div class="scrollable">
+                <table id="detailTable">
+                    <thead>
+                        <tr>
+                            <th><button id="selectAll">全選択</button></th>
+                            <th><strong>明細No</strong></th>
+                            <th><strong>製品・作業コード</strong></th>
+                            <th><strong>製品作業名</strong></th>
+                            <th><strong>数量</strong></th>
+                            <th><strong>単価</strong></th>
+                            <th><strong>金額</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="checkbox"><input type="checkbox" class="rowSelect"></td>
+                            <td class="smallNumeric">1</td>
+                            <td class="smallText">A001</td>
+                            <td class="middleText">製品A</td>
+                            <td class="smallNumeric">10</td>
+                            <td class="numeric">500.0</td>
+                            <td class="numeric">5,000</td>
+                        </tr>
+                        <tr>
+                            <td class="checkbox"><input type="checkbox" class="rowSelect"></td>
+                            <td class="smallNumeric">2</td>
+                            <td class="smallText">A002</td>
+                            <td class="middleText">製品B</td>
+                            <td class="smallNumeric">5</td>
+                            <td class="numeric">700.0</td>
+                            <td class="numeric">3,500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="register-container">
+            <button id="registerButton" class="register-btn">登録</button>
+        </div>
+    </div>
 
     <footer>
-        <p>&copy; 2024 Order Management System</p>
+        Copyright &copy; 2024 All rights reserved.
     </footer>
 
     <script>
-        document.getElementById('order-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            // Capture form data
-            const clientName = document.getElementById('client-name').value;
-            const projectName = document.getElementById('project-name').value;
-            const serviceType = document.getElementById('service-type').value;
-            const description = document.getElementById('description').value;
-            const estimatedHours = document.getElementById('estimated-hours').value;
-            const budget = document.getElementById('budget').value;
+        const customers = { "C001": "顧客A", "C002": "顧客B" };
+        const staff = { "S001": "担当者A", "S002": "担当者B" };
+        const deliveryConditions = { "D001": "条件A", "D002": "条件B" };
+        const paymentConditions = { "P001": "条件X", "P002": "条件Y" };
 
-            // Display order details
-            document.getElementById('order-client-name').textContent = clientName;
-            document.getElementById('order-project-name').textContent = projectName;
-            document.getElementById('order-service-type').textContent = serviceType;
-            document.getElementById('order-description').textContent = description;
-            document.getElementById('order-estimated-hours').textContent = estimatedHours;
-            document.getElementById('order-budget').textContent = budget;
+        function updateCustomer() {
+            const cd = document.querySelector('input[name="customerCD"]').value;
+            document.querySelector('input[name="customerName"]').value = customers[cd] || '';
+        }
 
-            // Clear the form
-            this.reset();
+        function updateStaff() {
+            const cd = document.querySelector('input[name="staffCD"]').value;
+            document.querySelector('input[name="staffName"]').value = staff[cd] || '';
+        }
+
+        function updateDeliveryCondition() {
+            const cd = document.querySelector('input[name="deliveryConditionCD"]').value;
+            document.querySelector('input[name="deliveryConditionContent"]').value = deliveryConditions[cd] || '';
+        }
+
+        function updatePaymentCondition() {
+            const cd = document.querySelector('input[name="paymentConditionCD"]').value;
+            document.querySelector('input[name="paymentConditionContent"]').value = paymentConditions[cd] || '';
+        }
+
+        // for checkbox
+        // document.getElementById('selectAll').addEventListener('change', function() {
+        //     const checkboxes = document.querySelectorAll('.rowSelect');
+        //     checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        // });
+
+        document.getElementById('selectAll').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.rowSelect');
+            const isChecked = this.classList.toggle('checked'); // ボタンの状態をトグル
+            checkboxes.forEach(checkbox => checkbox.checked = isChecked);
+        });
+
+
+        document.getElementById('addRow').addEventListener('click', function() {
+            const table = document.getElementById('detailTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td class="checkbox"><input type="checkbox" class="rowSelect"></td>
+                <td class="smallNumeric">${table.rows.length + 1}</td>
+                <td class="smallText">A1234</td>
+                <td class="middleText">新製品名</td>
+                <td class="smallNumeric">0</td>
+                <td class="numeric">0</td>
+                <td class="numeric">0</td>
+            `;
+        });
+
+        document.getElementById('deleteRow').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.rowSelect:checked');
+            checkboxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                row.parentNode.removeChild(row);
+            });
         });
     </script>
 </body>
