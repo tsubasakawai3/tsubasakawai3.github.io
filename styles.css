@@ -258,3 +258,11 @@ footer {
     align-items: center; /* 縦方向の中央揃え */
     width: 100%; /* 幅を100%に */
 }
+
+tbody tr {
+    background-color: white;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
