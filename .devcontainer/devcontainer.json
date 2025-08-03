@@ -1,0 +1,20 @@
+{
+    "name": "React Development Container",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "context": ".."
+    },
+    "forwardPorts": [5173],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "ms-vscode.vscode-typescript-next",
+                "RooVeterinaryInc.roo-cline"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install",
+    "remoteUser": "node"
+}
